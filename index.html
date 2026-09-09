@@ -44,7 +44,19 @@ body{overflow-x:hidden}.landing{position:relative;isolation:isolate}.noise{posit
 <script>
 const SUPABASE_URL="https://fipgvgeakiiougipzqzw.supabase.co";
 const SUPABASE_KEY="sb_publishable_vh0-ib-i5tF_D7Y2cyCSuw_j0kWdhbR";
-const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const sb = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      storage: window.localStorage,
+      storageKey: 'vendeai-auth-session'
+    }
+  }
+);
 let authUser=null;
 const features=[['⌁','Biblioteca de Prompts','Prompts organizados por situação, canal e objetivo.'],['✦','Gerador Inteligente','Explique a situação e monte o prompt certo em segundos.'],['◈','Personalizar com IA','Adapte um prompt ao seu produto, público e tom.'],['◎','Analisar Conversa','Entenda o momento da conversa e veja próximos passos.'],['↗','Abordagens','Crie primeiras mensagens naturais para diferentes leads.'],['◇','Objeções','Responda dúvidas sem pressão ou promessas falsas.'],['↻','Follow-up','Continue conversas que esfriaram com contexto.'],['▤','Conteúdo','Roteiros, legendas, CTAs, anúncios e carrosséis.']];
 document.querySelector('.features').innerHTML=features.map(x=>`<div class='feature'><div class='icon'>${x[0]}</div><h3>${x[1]}</h3><p>${x[2]}</p></div>`).join('');
