@@ -281,6 +281,143 @@ window.addEventListener('scroll',()=>document.querySelector('.top')?.classList.t
 
 document.querySelectorAll('.magnetic').forEach(btn=>{btn.addEventListener('mousemove',e=>{if(matchMedia('(pointer:fine)').matches){const r=btn.getBoundingClientRect();btn.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.06}px,${(e.clientY-r.top-r.height/2)*.08}px)`}});btn.addEventListener('mouseleave',()=>btn.style.transform='')});
 
+/* =========================================================
+   VENDEAI — PROTEÇÃO DO PAINEL ADMINISTRATIVO
+   Somente: marlosjunior002@gmail.com
+   ========================================================= */
 
+const VENDEAI_ADMIN_EMAIL = 'marlosjunior002@gmail.com';
+
+function isVendeAIAdmin() {
+  return String(authUser?.email || '')
+    .trim()
+    .toLowerCase() === VENDEAI_ADMIN_EMAIL;
+}
+
+/* Guarda a função original responsável pela interface */
+const originalSyncPlanUI = syncPlanUI;
+
+/* Atualiza plano, créditos e controla a visibilidade do ADM */
+syncPlanUI = function () {
+
+  originalSyncPlanUI();
+
+  document.querySelectorAll('[data-page="admin"]').forEach(item => {
+
+    if (isVendeAIAdmin()) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+
+  });
+
+};
+
+
+/* Guarda a página administrativa original */
+const originalAdminPage = adminPage;
+
+
+/* Nova proteção do Painel ADM */
+adminPage = async function () {
+
+  const page = document.querySelector('#page');
+
+  /* Bloqueia qualquer conta diferente do e-mail proprietário */
+  if (!authUser || !isVendeAIAdmin()) {
+
+    page.innerHTML = `
+      <div class="pageTitle">
+        <h2>🔒 Acesso restrito</h2>
+        <p>Esta área é exclusiva da administração da VendeAI.</p>
+      </div>
+
+      <div class="toolbox">
+        Sua conta não possui permissão para acessar o Painel Administrativo.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  /*
+    O painel antigo também verificava OWNER/ADMIN.
+    Para a conta proprietária, liberamos a interface.
+
+    O Supabase continua sendo a proteção real do servidor.
+  */
+
+  const previousRole = userRole;
+
+  userRole = 'OWNER';
+
+  try {
+
+    await originalAdminPage();
+
+  } finally {
+
+    userRole = previousRole;
+
+  }
+
+};
+
+
+/* Impede abertura manual do admin pelo frontend */
+const originalRender = render;
+
+render = function(page) {
+
+  if (page === 'admin' && !isVendeAIAdmin()) {
+
+    setActive('home');
+
+    const el = document.querySelector('#page');
+
+    el.innerHTML = `
+      <div class="pageTitle">
+        <h2>🔒 Acesso restrito</h2>
+        <p>Você não possui autorização para acessar esta área.</p>
+      </div>
+
+      <div class="toolbox">
+        O Painel Administrativo está disponível somente para o proprietário da VendeAI.
+      </div>
+    `;
+
+    return;
+
+  }
+
+  return originalRender(page);
+
+};
+
+
+/* Atualiza o menu após login/troca de sessão */
+sb.auth.onAuthStateChange(async (_event, session) => {
+
+  authUser = session?.user || null;
+
+  if (authUser) {
+    await loadProfile();
+  }
+
+  syncPlanUI();
+
+});
+
+
+/* Executa proteção ao carregar */
+syncPlanUI();
+
+
+console.log(
+  '%cVendeAI Admin Guard ativo',
+  'color:#72f59d;font-weight:bold'
+);
 
 </script></body></html>
