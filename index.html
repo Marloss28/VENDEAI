@@ -420,4 +420,1143 @@ console.log(
   'color:#72f59d;font-weight:bold'
 );
 
+/* =========================================================
+   VENDEAI — FERRAMENTAS PRO FUNCIONAIS
+   Assistente de Vendas
+   Analisar Conversa
+   Quebrar Objeções
+   Follow-up
+   Criador de Conteúdo
+   ========================================================= */
+
+const VENDEAI_PRO_TOOLS = {
+  assistant: {
+    title: 'Assistente de Vendas',
+    subtitle: 'Receba orientação e uma mensagem pronta para avançar sua venda.',
+    icon: '✦'
+  },
+
+  analyze: {
+    title: 'Analisar Conversa',
+    subtitle: 'Cole uma conversa e descubra o melhor próximo passo.',
+    icon: '◎'
+  },
+
+  objections: {
+    title: 'Quebrar Objeções',
+    subtitle: 'Transforme objeções em respostas naturais e persuasivas.',
+    icon: '◆'
+  },
+
+  followup: {
+    title: 'Follow-up',
+    subtitle: 'Retome conversas sem parecer insistente ou desesperado.',
+    icon: '↗'
+  },
+
+  content: {
+    title: 'Criador de Conteúdo',
+    subtitle: 'Crie conteúdos pensados para atrair, gerar interesse e vender.',
+    icon: '✎'
+  }
+};
+
+
+/* -----------------------------
+   Segurança básica de HTML
+----------------------------- */
+
+function vendeaiEscape(value) {
+  if (typeof esc === 'function') return esc(String(value || ''));
+
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+
+/* -----------------------------
+   Cabeçalho PRO
+----------------------------- */
+
+function vendeaiProHeader(type) {
+
+  const config = VENDEAI_PRO_TOOLS[type];
+
+  return `
+    <div class="pageTitle">
+      <h2>
+        ${config.title}
+        <span style="
+          font-size:10px;
+          color:var(--accent);
+          margin-left:6px;
+          vertical-align:middle;
+          font-weight:900;
+        ">
+          PRO ATIVO
+        </span>
+      </h2>
+
+      <p>${config.subtitle}</p>
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   ASSISTENTE DE VENDAS
+========================================================= */
+
+function vendeaiAssistantPage() {
+
+  return `
+    ${vendeaiProHeader('assistant')}
+
+    <div class="toolbox">
+
+      <div class="contextHint">
+        <span>✦</span>
+
+        <div>
+          <b>Seu assistente para a próxima decisão.</b><br>
+          Explique o que está acontecendo com o cliente e a VendeAI
+          vai indicar como agir e preparar uma resposta.
+        </div>
+      </div>
+
+      <div class="field">
+        <label>O que está acontecendo?</label>
+
+        <textarea
+          id="proAssistantContext"
+          placeholder="Ex.: apresentei meu produto, o cliente demonstrou interesse, mas agora está respondendo apenas 'ok' e 'blz'. O que faço?"
+        ></textarea>
+      </div>
+
+      <div class="field">
+        <label>Seu objetivo</label>
+
+        <select id="proAssistantGoal">
+          <option>Continuar a conversa</option>
+          <option>Gerar interesse</option>
+          <option>Apresentar meu produto</option>
+          <option>Levar para o WhatsApp</option>
+          <option>Fechar a venda</option>
+          <option>Descobrir o que o cliente precisa</option>
+          <option>Recuperar um cliente que esfriou</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Tom</label>
+
+        <select id="proAssistantTone">
+          <option>Natural</option>
+          <option>Amigável</option>
+          <option>Direto</option>
+          <option>Profissional</option>
+          <option>Persuasivo sem pressionar</option>
+          <option>Curto</option>
+        </select>
+      </div>
+
+      <button
+        class="primary"
+        onclick="vendeaiRunAssistant()"
+      >
+        ✦ Analisar situação
+      </button>
+
+      <div id="proToolOutput"></div>
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   ANALISAR CONVERSA
+========================================================= */
+
+function vendeaiAnalyzePage() {
+
+  return `
+    ${vendeaiProHeader('analyze')}
+
+    <div class="toolbox">
+
+      <div class="contextHint">
+        <span>◎</span>
+
+        <div>
+          <b>Cole a conversa completa.</b><br>
+          A VendeAI analisa interesse, objeções, momento da venda
+          e qual deve ser seu próximo passo.
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Conversa com o cliente</label>
+
+        <textarea
+          id="proAnalyzeConversation"
+          style="min-height:220px"
+          placeholder="Cole aqui a conversa com o cliente..."
+        ></textarea>
+      </div>
+
+      <div class="field">
+        <label>O que você está vendendo?</label>
+
+        <input
+          id="proAnalyzeProduct"
+          placeholder="Ex.: ebook para ajudar iniciantes a fazer a primeira venda"
+        >
+      </div>
+
+      <button
+        class="primary"
+        onclick="vendeaiRunAnalyze()"
+      >
+        ◎ Analisar conversa
+      </button>
+
+      <div id="proToolOutput"></div>
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   QUEBRAR OBJEÇÕES
+========================================================= */
+
+function vendeaiObjectionsPage() {
+
+  return `
+    ${vendeaiProHeader('objections')}
+
+    <div class="toolbox">
+
+      <div class="contextHint">
+        <span>◆</span>
+
+        <div>
+          <b>Não discuta com o cliente.</b><br>
+          Mostre a objeção exatamente como ele falou e receba
+          uma resposta natural para continuar a venda.
+        </div>
+      </div>
+
+      <div class="field">
+        <label>O que o cliente falou?</label>
+
+        <textarea
+          id="proObjection"
+          placeholder="Ex.: agora estou meio sem dinheiro, vou ver depois."
+        ></textarea>
+      </div>
+
+      <div class="field">
+        <label>Produto ou oferta</label>
+
+        <textarea
+          id="proObjectionProduct"
+          placeholder="Explique rapidamente o que você vende e como isso pode ajudar o cliente."
+        ></textarea>
+      </div>
+
+      <div class="field">
+        <label>Tom da resposta</label>
+
+        <select id="proObjectionTone">
+          <option>Natural</option>
+          <option>Amigável</option>
+          <option>Direto</option>
+          <option>Profissional</option>
+          <option>Curto</option>
+        </select>
+      </div>
+
+      <button
+        class="primary"
+        onclick="vendeaiRunObjection()"
+      >
+        ◆ Criar resposta
+      </button>
+
+      <div id="proToolOutput"></div>
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   FOLLOW-UP
+========================================================= */
+
+function vendeaiFollowupPage() {
+
+  return `
+    ${vendeaiProHeader('followup')}
+
+    <div class="toolbox">
+
+      <div class="contextHint">
+        <span>↗</span>
+
+        <div>
+          <b>Retome a conversa no momento certo.</b><br>
+          Conte como a conversa terminou e receba uma mensagem
+          pronta para voltar sem pressionar o cliente.
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Como a conversa terminou?</label>
+
+        <textarea
+          id="proFollowupContext"
+          placeholder="Ex.: mandei o link do produto ontem. Ele disse 'vou olhar' e não respondeu mais."
+        ></textarea>
+      </div>
+
+      <div class="field">
+        <label>Quanto tempo passou?</label>
+
+        <select id="proFollowupTime">
+          <option>Algumas horas</option>
+          <option>1 dia</option>
+          <option>2 dias</option>
+          <option>3 dias</option>
+          <option>1 semana</option>
+          <option>Mais de 1 semana</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Canal</label>
+
+        <select id="proFollowupChannel">
+          <option>WhatsApp</option>
+          <option>Instagram</option>
+          <option>TikTok</option>
+          <option>Facebook</option>
+          <option>E-mail</option>
+        </select>
+      </div>
+
+      <button
+        class="primary"
+        onclick="vendeaiRunFollowup()"
+      >
+        ↗ Criar follow-up
+      </button>
+
+      <div id="proToolOutput"></div>
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   CRIADOR DE CONTEÚDO
+========================================================= */
+
+function vendeaiContentPage() {
+
+  return `
+    ${vendeaiProHeader('content')}
+
+    <div class="toolbox">
+
+      <div class="contextHint">
+        <span>✎</span>
+
+        <div>
+          <b>Crie conteúdo com objetivo.</b><br>
+          Informe o assunto, plataforma e formato.
+          A VendeAI prepara o conteúdo completo para publicação.
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Sobre o que será o conteúdo?</label>
+
+        <textarea
+          id="proContentTopic"
+          placeholder="Ex.: quero criar conteúdo para iniciantes que postam todos os dias mas ainda não fizeram a primeira venda."
+        ></textarea>
+      </div>
+
+      <div class="field">
+        <label>Plataforma</label>
+
+        <select id="proContentPlatform">
+          <option>Instagram</option>
+          <option>TikTok</option>
+          <option>Facebook</option>
+          <option>Pinterest</option>
+          <option>WhatsApp</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Formato</label>
+
+        <select id="proContentFormat">
+          <option>Reels / TikTok</option>
+          <option>Carrossel</option>
+          <option>Post</option>
+          <option>Story</option>
+          <option>Legenda</option>
+          <option>Roteiro de vídeo</option>
+          <option>Anúncio</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Objetivo</label>
+
+        <select id="proContentGoal">
+          <option>Gerar interesse</option>
+          <option>Atrair seguidores</option>
+          <option>Gerar comentários</option>
+          <option>Levar para o WhatsApp</option>
+          <option>Apresentar produto</option>
+          <option>Vender</option>
+        </select>
+      </div>
+
+      <button
+        class="primary"
+        onclick="vendeaiRunContent()"
+      >
+        ✎ Criar conteúdo
+      </button>
+
+      <div id="proToolOutput"></div>
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   SUBSTITUI SOMENTE AS 5 ÁREAS
+========================================================= */
+
+tool = function(type) {
+
+  if (userPlan !== 'PRO') {
+
+    const config = VENDEAI_PRO_TOOLS[type];
+
+    document.querySelector('#page').innerHTML = `
+      <div class="pageTitle">
+        <h2>
+          ${config?.title || 'VendeAI PRO'}
+          <span style="font-size:11px;color:#d2b96c">
+            PRO
+          </span>
+        </h2>
+
+        <p>Recurso exclusivo para assinantes.</p>
+      </div>
+
+      <div class="toolbox">
+
+        <div style="text-align:center;padding:35px">
+
+          <div class="icon" style="margin:auto">
+            ✦
+          </div>
+
+          <h2>Recurso VendeAI PRO</h2>
+
+          <p style="color:var(--muted)">
+            Faça upgrade para acessar esta ferramenta.
+          </p>
+
+          <button
+            class="primary"
+            onclick="upgrade()"
+          >
+            Desbloquear PRO
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+    return;
+  }
+
+
+  const pages = {
+    assistant: vendeaiAssistantPage,
+    analyze: vendeaiAnalyzePage,
+    objections: vendeaiObjectionsPage,
+    followup: vendeaiFollowupPage,
+    content: vendeaiContentPage
+  };
+
+
+  if (!pages[type]) return;
+
+  document.querySelector('#page').innerHTML = pages[type]();
+};
+
+
+/* =========================================================
+   CHAMADA REAL DA IA
+========================================================= */
+
+async function vendeaiCallProAI(prompt) {
+
+  if (!authUser) {
+    openLogin();
+    throw new Error('login_required');
+  }
+
+
+  const {
+    data,
+    error
+  } = await sb.functions.invoke(
+    'vendeai-ai',
+    {
+      body: {
+        input: prompt,
+        mode: 'sales_message'
+      }
+    }
+  );
+
+
+  if (error) {
+    throw new Error(
+      error.message ||
+      'Não foi possível conectar à IA.'
+    );
+  }
+
+
+  if (!data || !data.text) {
+    throw new Error(
+      data?.error ||
+      'A IA não retornou uma resposta.'
+    );
+  }
+
+
+  try {
+    await loadProfile();
+  } catch (_) {}
+
+
+  return data.text;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+function vendeaiProLoading(text = 'VendeAI está analisando...') {
+
+  const output = document.querySelector('#proToolOutput');
+
+  if (!output) return;
+
+
+  output.innerHTML = `
+    <div class="generated">
+      <small style="color:var(--accent)">
+        ✦ ${text}
+      </small>
+
+      <p style="
+        color:var(--muted);
+        margin-bottom:0
+      ">
+        Aguarde alguns segundos.
+      </p>
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   RESULTADO
+========================================================= */
+
+function vendeaiProResult(title, text) {
+
+  const output = document.querySelector('#proToolOutput');
+
+  if (!output) return;
+
+
+  output.innerHTML = `
+    <div class="generated resultReady">
+
+      <small style="
+        color:var(--accent);
+        font-weight:900;
+        letter-spacing:1px
+      ">
+        ✦ ${vendeaiEscape(title)}
+      </small>
+
+      <div
+        class="resultMessage"
+        id="proToolGeneratedText"
+        style="
+          white-space:pre-wrap;
+          margin-top:16px;
+        "
+      >${vendeaiEscape(text)}</div>
+
+      <div
+        class="generatedActions"
+        style="
+          display:flex;
+          gap:8px;
+          flex-wrap:wrap;
+          margin-top:15px;
+        "
+      >
+
+        <button
+          class="ghost"
+          onclick="vendeaiCopyProResult()"
+        >
+          Copiar resultado
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   ERRO
+========================================================= */
+
+function vendeaiProError(error) {
+
+  if (
+    error?.message === 'login_required'
+  ) return;
+
+
+  const output = document.querySelector('#proToolOutput');
+
+  if (!output) return;
+
+
+  output.innerHTML = `
+    <div class="generated">
+
+      <b>
+        Não consegui gerar agora.
+      </b>
+
+      <p style="
+        color:var(--muted);
+        margin-bottom:0
+      ">
+        ${vendeaiEscape(
+          error?.message ||
+          'Tente novamente em alguns instantes.'
+        )}
+      </p>
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   COPIAR
+========================================================= */
+
+window.vendeaiCopyProResult = async function() {
+
+  const element = document.querySelector(
+    '#proToolGeneratedText'
+  );
+
+
+  if (!element) return;
+
+
+  try {
+
+    await navigator.clipboard.writeText(
+      element.innerText
+    );
+
+    toast('Resultado copiado ✓');
+
+  } catch (_) {
+
+    toast('Não foi possível copiar');
+
+  }
+};
+
+
+/* =========================================================
+   ASSISTENTE
+========================================================= */
+
+window.vendeaiRunAssistant = async function() {
+
+  const context =
+    document.querySelector('#proAssistantContext')
+    ?.value
+    .trim();
+
+  const goal =
+    document.querySelector('#proAssistantGoal')
+    ?.value;
+
+  const tone =
+    document.querySelector('#proAssistantTone')
+    ?.value;
+
+
+  if (!context) {
+    toast('Conte o que está acontecendo com o cliente');
+    return;
+  }
+
+
+  vendeaiProLoading('Analisando a situação...');
+
+
+  const prompt = `
+Você é o Assistente de Vendas da VendeAI.
+
+Analise uma situação real de vendas e ajude o vendedor a decidir o melhor próximo passo.
+
+CONTEXTO:
+${context}
+
+OBJETIVO:
+${goal}
+
+TOM:
+${tone}
+
+Responda em português do Brasil.
+
+Estruture exatamente assim:
+
+ANÁLISE
+Explique brevemente o que provavelmente está acontecendo na conversa.
+
+PRÓXIMO PASSO
+Diga objetivamente o que o vendedor deve fazer agora.
+
+MENSAGEM PRONTA
+Escreva uma mensagem pronta para ser enviada ao cliente.
+
+CUIDADO
+Aponte algo que o vendedor deve evitar.
+
+A mensagem deve parecer humana e natural.
+Não invente urgência.
+Não invente resultados.
+Não invente depoimentos ou provas sociais.
+Não pressione o cliente.
+`;
+
+
+  try {
+
+    const result =
+      await vendeaiCallProAI(prompt);
+
+    vendeaiProResult(
+      'ANÁLISE DE VENDA CONCLUÍDA',
+      result
+    );
+
+  } catch (error) {
+
+    vendeaiProError(error);
+
+  }
+};
+
+
+/* =========================================================
+   ANALISAR CONVERSA
+========================================================= */
+
+window.vendeaiRunAnalyze = async function() {
+
+  const conversation =
+    document.querySelector('#proAnalyzeConversation')
+    ?.value
+    .trim();
+
+  const product =
+    document.querySelector('#proAnalyzeProduct')
+    ?.value
+    .trim();
+
+
+  if (!conversation) {
+    toast('Cole a conversa que deseja analisar');
+    return;
+  }
+
+
+  vendeaiProLoading('Analisando a conversa...');
+
+
+  const prompt = `
+Você é um especialista em vendas conversacionais da VendeAI.
+
+Analise cuidadosamente a conversa abaixo.
+
+PRODUTO:
+${product || 'Não informado'}
+
+CONVERSA:
+${conversation}
+
+Retorne uma análise prática em português do Brasil.
+
+Estrutura:
+
+NÍVEL DE INTERESSE
+Classifique como baixo, médio ou alto e explique rapidamente.
+
+SINAIS DO CLIENTE
+Liste os principais sinais identificados na conversa.
+
+OBJEÇÃO OU BLOQUEIO
+Explique o que pode estar impedindo o avanço.
+
+O QUE NÃO FAZER
+Diga o principal erro que o vendedor deve evitar agora.
+
+PRÓXIMO PASSO
+Explique o que fazer.
+
+MENSAGEM RECOMENDADA
+Crie uma mensagem curta e natural para enviar agora.
+
+Não invente informações que não aparecem na conversa.
+Não prometa resultados.
+Não use pressão falsa ou escassez inventada.
+`;
+
+
+  try {
+
+    const result =
+      await vendeaiCallProAI(prompt);
+
+    vendeaiProResult(
+      'CONVERSA ANALISADA',
+      result
+    );
+
+  } catch (error) {
+
+    vendeaiProError(error);
+
+  }
+};
+
+
+/* =========================================================
+   OBJEÇÕES
+========================================================= */
+
+window.vendeaiRunObjection = async function() {
+
+  const objection =
+    document.querySelector('#proObjection')
+    ?.value
+    .trim();
+
+  const product =
+    document.querySelector('#proObjectionProduct')
+    ?.value
+    .trim();
+
+  const tone =
+    document.querySelector('#proObjectionTone')
+    ?.value;
+
+
+  if (!objection) {
+    toast('Informe o que o cliente falou');
+    return;
+  }
+
+
+  vendeaiProLoading('Preparando a melhor resposta...');
+
+
+  const prompt = `
+Você é especialista em tratamento ético de objeções em vendas.
+
+OBJEÇÃO EXATA DO CLIENTE:
+${objection}
+
+PRODUTO/OFERTA:
+${product || 'Não informado'}
+
+TOM:
+${tone}
+
+Crie uma resposta para continuar a conversa sem discutir, manipular ou pressionar.
+
+Estrutura:
+
+O QUE ESSA OBJEÇÃO PODE SIGNIFICAR
+Explique em no máximo 2 frases.
+
+COMO RESPONDER
+Explique rapidamente a estratégia.
+
+MENSAGEM PRONTA
+Entregue a mensagem exata que pode ser enviada.
+
+VERSÃO CURTA
+Crie uma segunda versão ainda mais curta.
+
+Use português natural do Brasil.
+Não invente desconto.
+Não invente escassez.
+Não invente resultados ou provas sociais.
+Não desrespeite a decisão do cliente.
+`;
+
+
+  try {
+
+    const result =
+      await vendeaiCallProAI(prompt);
+
+    vendeaiProResult(
+      'OBJEÇÃO ANALISADA',
+      result
+    );
+
+  } catch (error) {
+
+    vendeaiProError(error);
+
+  }
+};
+
+
+/* =========================================================
+   FOLLOW-UP
+========================================================= */
+
+window.vendeaiRunFollowup = async function() {
+
+  const context =
+    document.querySelector('#proFollowupContext')
+    ?.value
+    .trim();
+
+  const time =
+    document.querySelector('#proFollowupTime')
+    ?.value;
+
+  const channel =
+    document.querySelector('#proFollowupChannel')
+    ?.value;
+
+
+  if (!context) {
+    toast('Conte como a conversa terminou');
+    return;
+  }
+
+
+  vendeaiProLoading('Criando seu follow-up...');
+
+
+  const prompt = `
+Você é especialista em follow-up de vendas.
+
+Crie um follow-up humano e natural.
+
+CONTEXTO:
+${context}
+
+TEMPO DESDE O ÚLTIMO CONTATO:
+${time}
+
+CANAL:
+${channel}
+
+Objetivo:
+retomar a conversa sem parecer insistente.
+
+Entregue:
+
+MELHOR ABORDAGEM
+Explique em poucas palavras como retomar.
+
+MENSAGEM PRINCIPAL
+Crie uma mensagem pronta.
+
+VERSÃO MAIS DIRETA
+Crie uma alternativa curta.
+
+SE ELE NÃO RESPONDER
+Diga em uma frase o que o vendedor deve fazer depois.
+
+Use português brasileiro natural.
+Evite linguagem robótica.
+Não invente urgência.
+Não pressione.
+Não use culpa ou manipulação.
+`;
+
+
+  try {
+
+    const result =
+      await vendeaiCallProAI(prompt);
+
+    vendeaiProResult(
+      'FOLLOW-UP PRONTO',
+      result
+    );
+
+  } catch (error) {
+
+    vendeaiProError(error);
+
+  }
+};
+
+
+/* =========================================================
+   CONTEÚDO
+========================================================= */
+
+window.vendeaiRunContent = async function() {
+
+  const topic =
+    document.querySelector('#proContentTopic')
+    ?.value
+    .trim();
+
+  const platform =
+    document.querySelector('#proContentPlatform')
+    ?.value;
+
+  const format =
+    document.querySelector('#proContentFormat')
+    ?.value;
+
+  const goal =
+    document.querySelector('#proContentGoal')
+    ?.value;
+
+
+  if (!topic) {
+    toast('Informe sobre o que será o conteúdo');
+    return;
+  }
+
+
+  vendeaiProLoading('Criando seu conteúdo...');
+
+
+  const prompt = `
+Você é estrategista de conteúdo e copywriting da VendeAI.
+
+Crie um conteúdo completo com base nas informações abaixo.
+
+ASSUNTO:
+${topic}
+
+PLATAFORMA:
+${platform}
+
+FORMATO:
+${format}
+
+OBJETIVO:
+${goal}
+
+Adapte a estrutura ao formato escolhido.
+
+O conteúdo precisa:
+
+- prender atenção logo no início;
+- ser fácil de entender;
+- parecer escrito por uma pessoa;
+- gerar curiosidade sem clickbait enganoso;
+- possuir uma CTA coerente com o objetivo;
+- ser adequado à plataforma escolhida.
+
+Entregue:
+
+GANCHO
+
+CONTEÚDO COMPLETO
+
+CTA
+
+LEGENDA
+quando fizer sentido para o formato.
+
+3 IDEIAS DE TÍTULO
+
+Não invente resultados.
+Não invente depoimentos.
+Não faça promessas garantidas de dinheiro ou vendas.
+`;
+
+
+  try {
+
+    const result =
+      await vendeaiCallProAI(prompt);
+
+    vendeaiProResult(
+      'CONTEÚDO CRIADO',
+      result
+    );
+
+  } catch (error) {
+
+    vendeaiProError(error);
+
+  }
+};
+
+
+console.log(
+  '%cVendeAI PRO Tools carregadas',
+  'color:#72f59d;font-weight:bold'
+);
+ 
 </script></body></html>
