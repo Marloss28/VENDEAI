@@ -82,7 +82,106 @@ window.addEventListener('error',e=>logClientError(e.error||e.message,'window.err
 window.addEventListener('unhandledrejection',e=>logClientError(e.reason,'unhandledrejection'));
 trackEvent('page_view',{referrer:document.referrer||null});
 async function loadProfile(){if(!authUser){userRole='USER';userPlan='FREE';aiCredits=5;syncPlanUI();return}const {data,error}=await sb.from('profiles').select('email,plan,credits,role,access_status').eq('id',authUser.id).single();if(!error&&data){userRole=String(data.role||'user').toUpperCase();userPlan=String(data.plan||'free').toUpperCase();aiCredits=Number(data.credits??0);syncPlanUI();if(current)render(current)}}
-async function initAuth(){const {data}=await sb.auth.getSession();authUser=data.session?.user||null;if(authUser)await loadProfile();sb.auth.onAuthStateChange(async(_event,session)=>{authUser=session?.user||null;await loadProfile()})}
+async function initAuth() {
+  try {
+
+    const {
+      data,
+      error
+    } = await sb.auth.getSession();
+
+
+    if (error) {
+      console.error('Erro ao recuperar sessão:', error);
+    }
+
+
+    authUser = data?.session?.user || null;
+
+
+    if (authUser) {
+
+      await loadProfile();
+
+      /*
+        Se existe uma sessão válida salva,
+        entra automaticamente no painel.
+      */
+
+      showApp();
+
+    } else {
+
+      /*
+        Sem sessão = mostra landing normalmente.
+      */
+
+      document.querySelector('#app')?.classList.add('hidden');
+      document.querySelector('#landing')?.classList.remove('hidden');
+
+    }
+
+
+    sb.auth.onAuthStateChange(
+      async (event, session) => {
+
+        authUser = session?.user || null;
+
+
+        if (authUser) {
+
+          await loadProfile();
+
+          /*
+            Evita ficar preso na landing
+            depois que Supabase restaura/refresca a sessão.
+          */
+
+          if (
+            event === 'SIGNED_IN' ||
+            event === 'TOKEN_REFRESHED' ||
+            event === 'INITIAL_SESSION'
+          ) {
+
+            const app =
+              document.querySelector('#app');
+
+            if (
+              app &&
+              app.classList.contains('hidden')
+            ) {
+
+              showApp();
+
+            }
+
+          }
+
+        } else {
+
+          userRole = 'USER';
+          userPlan = 'FREE';
+          aiCredits = 5;
+
+          syncPlanUI();
+
+        }
+
+      }
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      'Falha ao inicializar autenticação:',
+      error
+    );
+
+  }
+}
+
+
 initAuth();
 function esc(v){return String(v??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]))}
 function syncPlanUI(){document.querySelectorAll('[data-page="admin"]').forEach(e=>e.style.display=['OWNER','ADMIN'].includes(userRole)?'':'none');document.querySelectorAll('.profile small').forEach(e=>e.textContent='Plano '+userPlan+' • '+aiCredits+' créditos IA');document.querySelectorAll('[data-pro]').forEach(e=>e.textContent=userPlan==='PRO'?'✦ PRO ativo':'✦ Desbloquear PRO')}
