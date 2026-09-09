@@ -1669,5 +1669,108 @@ console.log(
   '%cVendeAI PRO Tools carregadas',
   'color:#72f59d;font-weight:bold'
 );
- 
+
+/* =========================================================
+   VENDEAI — ENTRAR AUTOMATICAMENTE COM SESSÃO SALVA
+   ========================================================= */
+
+let vendeaiRestoringSession = false;
+
+async function vendeaiRestoreSession() {
+
+  if (vendeaiRestoringSession) return;
+
+  vendeaiRestoringSession = true;
+
+  try {
+
+    const { data, error } = await sb.auth.getSession();
+
+    if (error) {
+      console.error('Erro ao restaurar sessão:', error);
+      return;
+    }
+
+    const session = data?.session;
+
+    if (!session?.user) {
+      return;
+    }
+
+    authUser = session.user;
+
+    await loadProfile();
+
+    const landing = document.querySelector('#landing');
+    const app = document.querySelector('#app');
+    const modal = document.querySelector('#modal');
+
+    if (landing) {
+      landing.classList.add('hidden');
+    }
+
+    if (app) {
+      app.classList.remove('hidden');
+    }
+
+    if (modal) {
+      modal.classList.add('hidden');
+    }
+
+    syncPlanUI();
+
+    render('home');
+
+    window.scrollTo(0, 0);
+
+  } catch (error) {
+
+    console.error(
+      'Não foi possível restaurar a conta:',
+      error
+    );
+
+  } finally {
+
+    vendeaiRestoringSession = false;
+
+  }
+}
+
+
+/*
+  Executa assim que o site carrega.
+*/
+document.addEventListener(
+  'DOMContentLoaded',
+  vendeaiRestoreSession
+);
+
+
+/*
+  Corrige quando a pessoa sai do site,
+  volta pelo botão voltar ou navegador restaura a página.
+*/
+window.addEventListener(
+  'pageshow',
+  vendeaiRestoreSession
+);
+
+
+/*
+  Corrige quando a pessoa volta para uma aba
+  que já estava aberta.
+*/
+document.addEventListener(
+  'visibilitychange',
+  () => {
+
+    if (document.visibilityState === 'visible') {
+      vendeaiRestoreSession();
+    }
+
+  }
+);
+
+  
 </script></body></html>
