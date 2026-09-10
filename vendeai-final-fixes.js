@@ -849,3 +849,439 @@
   );
 
 })();
+/* =========================================================
+   VendeAI — Hotfix Gerador + Histórico
+   ========================================================= */
+(() => {
+  'use strict';
+
+  const htmlEscape = (value) =>
+    String(value ?? '').replace(/[&<>"']/g, c => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[c]));
+
+  /* =========================
+     GERADOR
+     ========================= */
+
+  window.generateMessage = async function () {
+    const goal = document.querySelector('#goal')?.value || '';
+    const channel = document.querySelector('#channel')?.value || '';
+    const tone = document.querySelector('#tone')?.value || '';
+    const situation =
+      document.querySelector('#situation')?.value.trim() || '';
+
+    if (!situation) {
+      toast('Conte a situação antes de gerar');
+      document.querySelector('#situation')?.focus();
+      return;
+    }
+
+    if (!authUser) {
+      openLogin();
+      return;
+    }
+
+    let out = document.querySelector('#generated');
+
+    if (!out) return;
+
+    out.innerHTML = `
+      <div class="generated">
+        <small>✦ VendeAI está escrevendo...</small>
+      </div>
+    `;
+
+    const input =
+      `Objetivo: ${goal}\n` +
+      `Canal: ${channel}\n` +
+      `Tom: ${tone}\n` +
+      `Contexto: ${situation}`;
+
+    try {
+      const { data, error } =
+        await sb.functions.invoke('vendeai-ai', {
+          body: {
+            input,
+            mode: 'sales_message'
+          }
+        });
+
+      if (error || !data?.text) {
+        out = document.querySelector('#generated');
+
+        if (out) {
+          out.innerHTML = `
+            <div class="generated">
+              <b>Não consegui gerar agora.</b>
+              <p>
+                ${htmlEscape(
+                  data?.error ||
+                  error?.message ||
+                  'Tente novamente.'
+                )}
+              </p>
+            </div>
+          `;
+        }
+
+        return;
+      }
+
+      /*
+        Atualiza os créditos SEM renderizar novamente
+        a página do Gerador.
+      */
+      if (
+        data.credits_remaining !== undefined &&
+        data.credits_remaining !== null
+      ) {
+        try {
+          aiCredits = Number(data.credits_remaining);
+          syncPlanUI();
+        } catch (_) {}
+      }
+
+      /*
+        Procura novamente o elemento atual.
+        Assim nunca escreve em um elemento antigo.
+      */
+      out = document.querySelector('#generated');
+
+      if (!out) return;
+
+      out.innerHTML = `
+        <div class="generated resultReady">
+
+          <small>
+            ANÁLISE + MENSAGEM PRONTA
+          </small>
+
+          <div class="resultMeta">
+            <span>🔥 Próximo passo identificado</span>
+            <span>${htmlEscape(channel)}</span>
+            <span>${htmlEscape(tone)}</span>
+          </div>
+
+          <div class="contextHint">
+            <span>◎</span>
+
+            <div>
+              <b>O que fazer agora</b><br>
+              ${htmlEscape(goal)}
+              sem perder o contexto da conversa.
+              Revise a mensagem abaixo e envie
+              quando fizer sentido.
+            </div>
+          </div>
+
+          <div
+            class="resultMessage"
+            id="mainGenerated"
+            style="white-space:pre-wrap"
+          >${htmlEscape(data.text)}</div>
+
+          <div class="generatedActions">
+
+            <button
+              class="ghost"
+              onclick="copyGenerated()"
+            >
+              Copiar mensagem
+            </button>
+
+            <button
+              class="ghost"
+              onclick="makeShorter()"
+            >
+              Mais curta
+            </button>
+
+            <button
+              class="ghost"
+              onclick="makeNatural()"
+            >
+              Mais natural
+            </button>
+
+            <button
+              class="ghost"
+              onclick="generateAnother()"
+            >
+              ↻ Gerar outra
+            </button>
+
+          </div>
+
+        </div>
+      `;
+
+    } catch (error) {
+      out = document.querySelector('#generated');
+
+      if (out) {
+        out.innerHTML = `
+          <div class="generated">
+            <b>Não consegui gerar agora.</b>
+            <p>
+              ${htmlEscape(
+                error?.message ||
+                'Tente novamente.'
+              )}
+            </p>
+          </div>
+        `;
+      }
+    }
+  };
+
+
+  /* =========================
+     HISTÓRICO
+     ========================= */
+
+  window.vendeaiRenderHistory = async function () {
+    const pageEl =
+      document.querySelector('#page');
+
+    if (!pageEl) return;
+
+    if (!authUser) {
+      openLogin();
+      return;
+    }
+
+    pageEl.innerHTML = `
+      <div class="pageTitle">
+        <h2>Histórico</h2>
+        <p>
+          Suas mensagens e análises
+          geradas pela VendeAI.
+        </p>
+      </div>
+
+      <div class="toolbox">
+        <small style="color:var(--accent)">
+          ✦ Carregando histórico...
+        </small>
+      </div>
+    `;
+
+    const { data, error } =
+      await sb
+        .from('generation_history')
+        .select(
+          'id,feature,input_text,output_text,credits_used,created_at'
+        )
+        .eq('user_id', authUser.id)
+        .order('created_at', {
+          ascending: false
+        })
+        .limit(50);
+
+    if (error) {
+      console.error(
+        'Erro ao carregar histórico:',
+        error
+      );
+
+      pageEl.innerHTML = `
+        <div class="pageTitle">
+          <h2>Histórico</h2>
+        </div>
+
+        <div class="toolbox">
+          Não foi possível carregar
+          o histórico agora.
+
+          <br><br>
+
+          <button
+            class="primary"
+            onclick="vendeaiRenderHistory()"
+          >
+            Tentar novamente
+          </button>
+        </div>
+      `;
+
+      return;
+    }
+
+    const rows =
+      Array.isArray(data) ? data : [];
+
+    if (!rows.length) {
+      pageEl.innerHTML = `
+        <div class="pageTitle">
+          <h2>Histórico</h2>
+
+          <p>
+            Suas mensagens e análises
+            aparecerão aqui.
+          </p>
+        </div>
+
+        <div class="toolbox">
+          Você ainda não possui
+          gerações salvas.
+        </div>
+      `;
+
+      return;
+    }
+
+    const cards =
+      rows.map(row => {
+        const date =
+          row.created_at
+            ? new Date(
+                row.created_at
+              ).toLocaleString('pt-BR')
+            : '';
+
+        return `
+          <div
+            class="generated resultReady"
+            style="margin-bottom:14px"
+          >
+
+            <div
+              style="
+                display:flex;
+                justify-content:space-between;
+                gap:10px;
+                flex-wrap:wrap
+              "
+            >
+              <small
+                style="
+                  color:var(--accent);
+                  font-weight:900
+                "
+              >
+                ${htmlEscape(
+                  row.feature ||
+                  'Geração IA'
+                )}
+              </small>
+
+              <small
+                style="color:var(--muted)"
+              >
+                ${htmlEscape(date)}
+                •
+                ${Number(
+                  row.credits_used || 1
+                )}
+                crédito
+              </small>
+            </div>
+
+            ${
+              row.input_text
+                ? `
+                  <details
+                    style="margin-top:12px"
+                  >
+                    <summary
+                      style="
+                        cursor:pointer;
+                        color:var(--muted)
+                      "
+                    >
+                      Ver contexto enviado
+                    </summary>
+
+                    <div
+                      style="
+                        white-space:pre-wrap;
+                        margin-top:10px
+                      "
+                    >
+                      ${htmlEscape(
+                        row.input_text
+                      )}
+                    </div>
+                  </details>
+                `
+                : ''
+            }
+
+            <div
+              class="resultMessage"
+              style="
+                white-space:pre-wrap;
+                margin-top:15px
+              "
+            >
+              ${htmlEscape(
+                row.output_text || ''
+              )}
+            </div>
+
+            <div
+              class="generatedActions"
+              style="margin-top:12px"
+            >
+
+              <button
+                class="ghost"
+                data-copy-history="${row.id}"
+              >
+                Copiar resultado
+              </button>
+
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+    pageEl.innerHTML = `
+      <div class="pageTitle">
+        <h2>Histórico</h2>
+
+        <p>
+          Últimas ${rows.length}
+          gerações feitas na sua conta.
+        </p>
+      </div>
+
+      <div style="max-width:900px">
+        ${cards}
+      </div>
+    `;
+
+    rows.forEach(row => {
+      const button =
+        pageEl.querySelector(
+          `[data-copy-history="${row.id}"]`
+        );
+
+      if (!button) return;
+
+      button.onclick = async () => {
+        try {
+          await navigator.clipboard.writeText(
+            row.output_text || ''
+          );
+
+          toast('Resultado copiado ✓');
+        } catch (_) {
+          toast(
+            'Não foi possível copiar'
+          );
+        }
+      };
+    });
+  };
+
+  console.log(
+    'VendeAI — Gerador e Histórico corrigidos'
+  );
+})();
