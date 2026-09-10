@@ -1464,3 +1464,127 @@
     'VendeAI — oferta PRO + E-book carregada'
   );
 })();
+/* =========================================================
+   VendeAI — Contador de reserva da oferta PRO
+   ========================================================= */
+(() => {
+  'use strict';
+
+  let vendeaiOfferTimer = null;
+
+  function startVendeAIOfferTimer(seconds = 15 * 60) {
+    clearInterval(vendeaiOfferTimer);
+
+    let remaining = seconds;
+
+    const renderTimer = () => {
+      const timer = document.querySelector('#vendeaiOfferTimer');
+      const label = document.querySelector('#vendeaiOfferTimerLabel');
+
+      if (!timer) {
+        clearInterval(vendeaiOfferTimer);
+        return;
+      }
+
+      const minutes = Math.floor(remaining / 60);
+      const secs = remaining % 60;
+
+      timer.textContent =
+        `${String(minutes).padStart(2, '0')}:` +
+        `${String(secs).padStart(2, '0')}`;
+
+      if (remaining <= 0) {
+        clearInterval(vendeaiOfferTimer);
+
+        timer.textContent = '00:00';
+
+        if (label) {
+          label.textContent =
+            'Tempo da reserva encerrado';
+        }
+
+        return;
+      }
+
+      remaining--;
+    };
+
+    renderTimer();
+
+    vendeaiOfferTimer =
+      setInterval(renderTimer, 1000);
+  }
+
+  const oldUpgrade =
+    window.upgrade;
+
+  window.upgrade = function () {
+    oldUpgrade();
+
+    const modalBox =
+      document.querySelector('#modalContent');
+
+    if (!modalBox) return;
+
+    const timerBox =
+      document.createElement('div');
+
+    timerBox.innerHTML = `
+      <div
+        style="
+          margin:16px 0;
+          padding:12px 14px;
+          border:1px solid #3a473d;
+          background:#111612;
+          border-radius:10px;
+          text-align:center
+        "
+      >
+        <small
+          id="vendeaiOfferTimerLabel"
+          style="
+            display:block;
+            color:var(--muted);
+            margin-bottom:4px
+          "
+        >
+          Sua oferta está reservada por
+        </small>
+
+        <b
+          id="vendeaiOfferTimer"
+          style="
+            display:block;
+            color:var(--accent);
+            font-size:24px;
+            letter-spacing:1px
+          "
+        >
+          15:00
+        </b>
+      </div>
+    `;
+
+    const priceCard =
+      modalBox.querySelector('.pricecard');
+
+    if (priceCard) {
+      priceCard.insertAdjacentElement(
+        'afterend',
+        timerBox.firstElementChild
+      );
+    }
+
+    startVendeAIOfferTimer();
+  };
+
+  document
+    .querySelectorAll('[data-pro]')
+    .forEach(button => {
+      button.onclick = window.upgrade;
+    });
+
+  console.log(
+    'VendeAI — contador da oferta carregado'
+  );
+})();
