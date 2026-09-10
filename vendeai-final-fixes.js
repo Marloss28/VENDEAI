@@ -1285,3 +1285,182 @@
     'VendeAI — Gerador e Histórico corrigidos'
   );
 })();
+/* =========================================================
+   VendeAI — Oferta PRO + E-book
+   ========================================================= */
+(() => {
+  'use strict';
+
+  const VENDEAI_COMBO_CHECKOUT =
+    'https://pay.cakto.com.br/dxdncoc_1098833';
+
+  window.goToCheckout = function () {
+    try {
+      trackEvent('checkout_click');
+    } catch (_) {}
+
+    window.open(
+      VENDEAI_COMBO_CHECKOUT,
+      '_blank',
+      'noopener,noreferrer'
+    );
+  };
+
+  window.upgrade = function () {
+    openModal(`
+      <div style="text-align:center">
+
+        <small
+          style="
+            color:var(--accent);
+            font-weight:900;
+            letter-spacing:1.5px
+          "
+        >
+          OFERTA ESPECIAL
+        </small>
+
+        <h2 style="margin-top:10px">
+          VendeAI PRO + E-book
+        </h2>
+
+        <p>
+          Desbloqueie todo o potencial da VendeAI
+          e leve também o e-book
+          <b>Primeira Venda do Zero com IA</b>.
+        </p>
+
+        <div
+          class="pricecard"
+          style="
+            padding:20px;
+            margin:20px 0;
+            text-align:center
+          "
+        >
+
+          <small
+            style="
+              display:block;
+              color:var(--muted);
+              margin-bottom:4px
+            "
+          >
+            De
+            <span
+              style="
+                text-decoration:line-through;
+                font-size:16px
+              "
+            >
+              R$ 59,90
+            </span>
+          </small>
+
+          <div
+            style="
+              font-size:13px;
+              color:var(--muted)
+            "
+          >
+            por apenas
+          </div>
+
+          <b
+            style="
+              display:block;
+              font-size:38px;
+              margin:2px 0;
+              color:var(--accent)
+            "
+          >
+            R$ 39,89
+          </b>
+
+          <small
+            style="
+              display:block;
+              color:var(--muted)
+            "
+          >
+            pagamento único
+          </small>
+
+        </div>
+
+        <div
+          style="
+            text-align:left;
+            line-height:2;
+            margin:18px 0;
+            color:#dbe1dd
+          "
+        >
+          ✓ VendeAI PRO completo<br>
+          ✓ 50 créditos de IA renovados diariamente<br>
+          ✓ Assistente de vendas com IA<br>
+          ✓ Análise de conversas<br>
+          ✓ Objeções e follow-ups<br>
+          ✓ Biblioteca PRO completa<br>
+          ✓ Histórico de gerações<br>
+          ✓ E-book <b>Primeira Venda do Zero com IA</b>
+        </div>
+
+        <div
+          class="contextHint"
+          style="
+            text-align:left;
+            margin:18px 0
+          "
+        >
+          <span>✦</span>
+
+          <div>
+            <b>Importante</b><br>
+            Use na Cakto o
+            <b>mesmo e-mail da sua conta VendeAI</b>.
+            É através dele que o PRO será
+            liberado automaticamente.
+          </div>
+        </div>
+
+        <button
+          class="primary"
+          onclick="goToCheckout()"
+          style="
+            width:100%;
+            font-size:15px;
+            padding:14px
+          "
+        >
+          Quero o PRO + E-book por R$ 39,89 →
+        </button>
+
+        <small
+          style="
+            display:block;
+            color:var(--muted);
+            margin-top:12px
+          "
+        >
+          Checkout seguro pela Cakto
+        </small>
+
+      </div>
+    `);
+  };
+
+  /*
+    Garante que todos os botões PRO existentes
+    utilizem a nova oferta.
+  */
+  document
+    .querySelectorAll('[data-pro]')
+    .forEach(button => {
+      button.onclick = window.upgrade;
+    });
+
+  console.log(
+    'VendeAI — oferta PRO + E-book carregada'
+  );
+})();
