@@ -1,0 +1,37 @@
+name: Integrar E-books ao VendeAI
+
+on:
+  push:
+    paths:
+      - '.github/workflows/integrate-ebooks-nav.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Adicionar script de navegação dos e-books
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          text = p.read_text(encoding='utf-8')
+          tag = "<script src='/ebooks-nav.js'></script>"
+          if tag not in text:
+              if '</body>' not in text:
+                  raise SystemExit('index.html sem </body>')
+              text = text.replace('</body>', tag + '</body>', 1)
+              p.write_text(text, encoding='utf-8')
+          PY
+      - name: Remover workflow temporário
+        run: rm -f .github/workflows/integrate-ebooks-nav.yml
+      - name: Commit da integração
+        run: |
+          git config user.name "VendeAI Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html .github/workflows/integrate-ebooks-nav.yml
+          git diff --cached --quiet || git commit -m "feat: mostrar e-books no site principal"
+          git push
