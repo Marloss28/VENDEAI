@@ -1,4 +1,7 @@
 {
+  "rewrites": [
+    { "source": "/ebooks", "destination": "/ebooks.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
