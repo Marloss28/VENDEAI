@@ -1285,306 +1285,46 @@
     'VendeAI — Gerador e Histórico corrigidos'
   );
 })();
-/* =========================================================
-   VendeAI — Oferta PRO + E-book
-   ========================================================= */
+/* VendeAI — escolha transparente de oferta, sem contador de reserva. */
 (() => {
-  'use strict';
-
-  const VENDEAI_COMBO_CHECKOUT =
-    'https://pay.cakto.com.br/dxdncoc_1098833';
-
-  window.goToCheckout = function () {
-    try {
-      trackEvent('checkout_click');
-    } catch (_) {}
-
-    window.open(
-      VENDEAI_COMBO_CHECKOUT,
-      '_blank',
-      'noopener,noreferrer'
-    );
+  const offers = {
+    pro: { title: 'VendeAI PRO', price: '29,90', url: 'https://pay.cakto.com.br/srgrhee_1094595' },
+    combo: { title: 'PRO + E-book', price: '39,89', url: 'https://pay.cakto.com.br/dxdncoc_1098833' }
   };
-
+  window.goToCheckout = function (choice = 'pro') {
+    const offer = offers[choice];
+    if (!offer) return;
+    try { trackEvent('checkout_click', {offer: choice}); } catch (_) {}
+    window.open(offer.url, '_blank', 'noopener,noreferrer');
+  };
   window.upgrade = function () {
     openModal(`
-      <div style="text-align:center">
-
-        <small
-          style="
-            color:var(--accent);
-            font-weight:900;
-            letter-spacing:1.5px
-          "
-        >
-          OFERTA ESPECIAL
-        </small>
-
-        <h2 style="margin-top:10px">
-          VendeAI PRO + E-book
-        </h2>
-
-        <p>
-          Desbloqueie todo o potencial da VendeAI
-          e leve também o e-book
-          <b>Primeira Venda do Zero com IA</b>.
-        </p>
-
-        <div
-          class="pricecard"
-          style="
-            padding:20px;
-            margin:20px 0;
-            text-align:center
-          "
-        >
-
-          <small
-            style="
-              display:block;
-              color:var(--muted);
-              margin-bottom:4px
-            "
-          >
-            De
-            <span
-              style="
-                text-decoration:line-through;
-                font-size:16px
-              "
-            >
-              R$ 59,90
-            </span>
-          </small>
-
-          <div
-            style="
-              font-size:13px;
-              color:var(--muted)
-            "
-          >
-            por apenas
-          </div>
-
-          <b
-            style="
-              display:block;
-              font-size:38px;
-              margin:2px 0;
-              color:var(--accent)
-            "
-          >
-            R$ 39,89
-          </b>
-
-          <small
-            style="
-              display:block;
-              color:var(--muted)
-            "
-          >
-            pagamento único
-          </small>
-
+      <div class="plan-choice">
+        <small class="plan-eyebrow">ESCOLHA COMO COMEÇAR</small>
+        <h2>Mais recursos para suas conversas.</h2>
+        <p>Teste o FREE e escolha a opção que faz sentido para você.</p>
+        <div class="plan-grid">
+          <article class="plan-option" aria-labelledby="pro-title">
+            <small>AS FERRAMENTAS COMPLETAS</small>
+            <h3 id="pro-title">VendeAI PRO</h3>
+            <p class="plan-price">R$ 29,90</p>
+            <p class="plan-billing">Pagamento único na oferta atual.</p>
+            <ul><li>50 créditos de IA por dia</li><li>Biblioteca Premium</li><li>Análise de conversas, objeções e follow-ups</li><li>Histórico e favoritos</li></ul>
+            <button class="primary" onclick="goToCheckout('pro')">Escolher PRO por R$ 29,90</button>
+          </article>
+          <article class="plan-option plan-combo" aria-labelledby="combo-title">
+            <small>FERRAMENTAS + MATERIAL DE APOIO</small>
+            <h3 id="combo-title">PRO + E-book</h3>
+            <p class="plan-price">R$ 39,89</p>
+            <p class="plan-billing">Pagamento único na oferta atual.</p>
+            <ul><li>Todos os recursos do PRO</li><li>50 créditos de IA por dia</li><li>E-book Primeira Venda do Zero com IA</li><li>Ferramentas e leitura para aplicar no seu ritmo</li></ul>
+            <button class="primary" onclick="goToCheckout('combo')">Escolher combo por R$ 39,89</button>
+          </article>
         </div>
-
-        <div
-          style="
-            text-align:left;
-            line-height:2;
-            margin:18px 0;
-            color:#dbe1dd
-          "
-        >
-          ✓ VendeAI PRO completo<br>
-          ✓ 50 créditos de IA renovados diariamente<br>
-          ✓ Assistente de vendas com IA<br>
-          ✓ Análise de conversas<br>
-          ✓ Objeções e follow-ups<br>
-          ✓ Biblioteca PRO completa<br>
-          ✓ Histórico de gerações<br>
-          ✓ E-book <b>Primeira Venda do Zero com IA</b>
-        </div>
-
-        <div
-          class="contextHint"
-          style="
-            text-align:left;
-            margin:18px 0
-          "
-        >
-          <span>✦</span>
-
-          <div>
-            <b>Importante</b><br>
-            Use na Cakto o
-            <b>mesmo e-mail da sua conta VendeAI</b>.
-            É através dele que o PRO será
-            liberado automaticamente.
-          </div>
-        </div>
-
-        <button
-          class="primary"
-          onclick="goToCheckout()"
-          style="
-            width:100%;
-            font-size:15px;
-            padding:14px
-          "
-        >
-          Quero o PRO + E-book por R$ 39,89 →
-        </button>
-
-        <small
-          style="
-            display:block;
-            color:var(--muted);
-            margin-top:12px
-          "
-        >
-          Checkout seguro pela Cakto
-        </small>
-
+        <p class="plan-note">Use o mesmo e-mail da sua conta VendeAI no checkout. Confira a oferta e as condições antes de pagar.</p>
+        <button class="ghost" onclick="document.querySelector('#modal').classList.add('hidden')">Continuar explorando</button>
       </div>
     `);
   };
-
-  /*
-    Garante que todos os botões PRO existentes
-    utilizem a nova oferta.
-  */
-  document
-    .querySelectorAll('[data-pro]')
-    .forEach(button => {
-      button.onclick = window.upgrade;
-    });
-
-  console.log(
-    'VendeAI — oferta PRO + E-book carregada'
-  );
-})();
-/* =========================================================
-   VendeAI — Contador de reserva da oferta PRO
-   ========================================================= */
-(() => {
-  'use strict';
-
-  let vendeaiOfferTimer = null;
-
-  function startVendeAIOfferTimer(seconds = 15 * 60) {
-    clearInterval(vendeaiOfferTimer);
-
-    let remaining = seconds;
-
-    const renderTimer = () => {
-      const timer = document.querySelector('#vendeaiOfferTimer');
-      const label = document.querySelector('#vendeaiOfferTimerLabel');
-
-      if (!timer) {
-        clearInterval(vendeaiOfferTimer);
-        return;
-      }
-
-      const minutes = Math.floor(remaining / 60);
-      const secs = remaining % 60;
-
-      timer.textContent =
-        `${String(minutes).padStart(2, '0')}:` +
-        `${String(secs).padStart(2, '0')}`;
-
-      if (remaining <= 0) {
-        clearInterval(vendeaiOfferTimer);
-
-        timer.textContent = '00:00';
-
-        if (label) {
-          label.textContent =
-            'Tempo da reserva encerrado';
-        }
-
-        return;
-      }
-
-      remaining--;
-    };
-
-    renderTimer();
-
-    vendeaiOfferTimer =
-      setInterval(renderTimer, 1000);
-  }
-
-  const oldUpgrade =
-    window.upgrade;
-
-  window.upgrade = function () {
-    oldUpgrade();
-
-    const modalBox =
-      document.querySelector('#modalContent');
-
-    if (!modalBox) return;
-
-    const timerBox =
-      document.createElement('div');
-
-    timerBox.innerHTML = `
-      <div
-        style="
-          margin:16px 0;
-          padding:12px 14px;
-          border:1px solid #3a473d;
-          background:#111612;
-          border-radius:10px;
-          text-align:center
-        "
-      >
-        <small
-          id="vendeaiOfferTimerLabel"
-          style="
-            display:block;
-            color:var(--muted);
-            margin-bottom:4px
-          "
-        >
-          Sua oferta está reservada por
-        </small>
-
-        <b
-          id="vendeaiOfferTimer"
-          style="
-            display:block;
-            color:var(--accent);
-            font-size:24px;
-            letter-spacing:1px
-          "
-        >
-          15:00
-        </b>
-      </div>
-    `;
-
-    const priceCard =
-      modalBox.querySelector('.pricecard');
-
-    if (priceCard) {
-      priceCard.insertAdjacentElement(
-        'afterend',
-        timerBox.firstElementChild
-      );
-    }
-
-    startVendeAIOfferTimer();
-  };
-
-  document
-    .querySelectorAll('[data-pro]')
-    .forEach(button => {
-      button.onclick = window.upgrade;
-    });
-
-  console.log(
-    'VendeAI — contador da oferta carregado'
-  );
+  document.querySelectorAll('[data-pro]').forEach(button => { button.onclick = window.upgrade; });
 })();

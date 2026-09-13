@@ -1,0 +1,23 @@
+.hero{min-height:0;padding:64px 20px 38px;max-width:940px}
+.hero h1{font-size:clamp(38px,5.6vw,64px);line-height:1.08;letter-spacing:-2px;margin:18px 0}
+.hero p{font-size:18px;max-width:610px;margin-bottom:22px}
+.hero .chips{margin-top:20px;font-size:14px;gap:16px}
+.heroBtns{flex-wrap:wrap}.demo{scroll-margin-top:90px}
+.demo .window{transform:none}.demobody{min-height:240px;padding:28px}
+.demo-next{margin-top:20px;border-top:1px solid var(--line);padding-top:18px}
+.demo-next p{font-size:15px;line-height:1.6}
+.demo-next .primary{width:100%}.demo-next .ghost{margin-top:10px;width:100%}
+.modalbox:has(.plan-choice){max-width:850px;max-height:90dvh;overflow-y:auto;padding:30px}
+.plan-eyebrow{color:var(--accent);letter-spacing:1.5px;font-weight:750}
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:22px 0}
+.plan-option{display:flex;flex-direction:column;padding:23px;border:1px solid var(--line);border-radius:16px;background:#0c100d;text-align:left}
+.plan-option>small{font-size:12px;letter-spacing:.8px;color:var(--muted)}
+.plan-option h3{font-size:25px;margin:16px 0 6px}
+.plan-option .plan-price{font-size:38px;font-weight:800;color:var(--text);margin:0;line-height:1.3}
+.plan-option .plan-billing{font-size:14px;margin:6px 0}
+.plan-option ul{padding-left:20px;line-height:1.65;font-size:15px;flex:1;color:#bac7be}
+.plan-option li+li{margin-top:8px}.plan-combo{border-color:#53755f;background:#101b14}
+.plan-note{font-size:14px;line-height:1.5}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+@media(prefers-reduced-motion:no-preference){.primary,.ghost{transition:background .18s ease,transform .18s ease,box-shadow .18s ease}.primary:active,.ghost:active{transform:scale(.98)}.plan-option{animation:planEnter .2s ease both}.plan-option:nth-child(2){animation-delay:.06s}.demo-next{animation:planEnter .2s ease both}@keyframes planEnter{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}}
+@media(max-width:600px){.hero{padding:36px 16px 26px}.hero h1{font-size:39px;letter-spacing:-1.4px}.hero p{font-size:16px}.hero .chips{gap:8px;font-size:13px}.plan-grid{grid-template-columns:1fr}.modalbox:has(.plan-choice){padding:28px 18px 20px}.plan-option{padding:20px}.demobody{padding:20px}.heroBtns button{width:100%}}
