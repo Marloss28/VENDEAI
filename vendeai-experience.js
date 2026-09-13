@@ -9,14 +9,14 @@
     const free = document.querySelector('#demo-free');
     const plans = document.querySelector('#demo-plans');
     if (free) free.onclick = () => {
-      if (window.authUser) { showApp(); render('generator'); }
+      if ((typeof authUser!=='undefined'?authUser:null)) { showApp(); render('generator'); }
       else openLogin();
     };
     if (plans) plans.onclick = () => window.upgrade?.();
   }
 
   function safeName() {
-    const user = window.authUser;
+    const user = (typeof authUser!=='undefined'?authUser:null);
     const meta = user?.user_metadata || {};
     let name = String(meta.full_name || meta.name || '').trim().split(/\s+/)[0] || '';
     if (!name && user?.email) {
@@ -35,7 +35,7 @@
   }
 
   function welcomeKey() {
-    const id = window.authUser?.id || 'guest';
+    const id = (typeof authUser!=='undefined'?authUser:null)?.id || 'guest';
     const date = new Intl.DateTimeFormat('en-CA', {timeZone:'America/Fortaleza'}).format(new Date());
     return 'vendeai_welcome_' + id + '_' + date;
   }
@@ -43,14 +43,14 @@
   function personalizeHeader() {
     const heading = document.querySelector('.apphead h1');
     const paragraph = document.querySelector('.apphead p');
-    if (!heading || !window.authUser) return;
+    if (!heading || !(typeof authUser!=='undefined'?authUser:null)) return;
     const name = safeName();
     heading.innerHTML = `${greeting()}, <span>${name ? name : 'que bom ter você aqui'}.</span> 👋`;
     if (paragraph) paragraph.textContent = 'Seu espaço está pronto. O que a gente vai destravar hoje?';
   }
 
   function welcomeCard() {
-    if (!window.authUser || typeof window.home !== 'function') return;
+    if (!(typeof authUser!=='undefined'?authUser:null) || typeof window.home !== 'function') return;
     const page = document.querySelector('#page');
     if (!page || page.querySelector('.vendeai-welcome')) return;
 
@@ -73,7 +73,7 @@
           <button class="ghost" type="button" data-welcome-page="approach">Montar uma abordagem</button>
         </div>
       </div>
-      <span class="welcome-plan">${String(window.userPlan || 'FREE').toUpperCase()}</span>
+      <span class="welcome-plan">${String((typeof userPlan!=='undefined'?userPlan:'FREE') || 'FREE').toUpperCase()}</span>
     `;
 
     page.prepend(card);
@@ -85,7 +85,7 @@
   function refreshWelcome() {
     setTimeout(() => {
       personalizeHeader();
-      if (window.current === 'home' || document.querySelector('#page .ask')) welcomeCard();
+      if ((typeof current!=='undefined'?current:'home') === 'home' || document.querySelector('#page .ask')) welcomeCard();
     }, 0);
   }
 
