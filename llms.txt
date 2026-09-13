@@ -1,0 +1,29 @@
+# VendeAI
+
+> Plataforma brasileira de inteligência artificial focada em vendas conversacionais, abordagens, respostas a objeções, follow-ups e criação de mensagens comerciais.
+
+## Site oficial
+- https://vendeai.dev.br/
+
+## Principais recursos
+- Gerador de mensagens para vendas
+- Abordagens para Instagram e WhatsApp
+- Respostas a objeções
+- Follow-up
+- Análise de conversas
+- Criação de conteúdo para vendas
+- Biblioteca de prompts e mensagens
+- Plano gratuito e plano PRO
+
+## E-books
+- https://vendeai.dev.br/ebooks.html
+
+## Público
+A VendeAI é voltada a iniciantes e pessoas que vendem produtos ou serviços pela internet e querem ajuda para se comunicar melhor com clientes.
+
+## Idioma
+Português do Brasil (pt-BR)
+
+## Marca
+Nome oficial: VendeAI
+Domínio oficial: vendeai.dev.br
