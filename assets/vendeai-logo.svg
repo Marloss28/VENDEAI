@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">VendeAI</title>
+  <desc id="desc">Símbolo da VendeAI em forma de V e seta de crescimento</desc>
+  <rect width="64" height="64" rx="16" fill="#101713"/>
+  <path d="M15 18l15.5 31h3L49 18h-9.5L32 35.3 24.5 18H15z" fill="#72f59d"/>
+  <path d="M37 14h13v13M49 15L35 29" fill="none" stroke="#d9ffe4" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

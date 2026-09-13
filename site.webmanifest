@@ -1,0 +1,10 @@
+{
+  "name": "VendeAI — Sua IA de vendas",
+  "short_name": "VendeAI",
+  "description": "Mensagens, abordagens e estratégias de vendas criadas com inteligência artificial.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080a09",
+  "theme_color": "#090b0a",
+  "icons": [{"src":"/assets/vendeai-logo.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
