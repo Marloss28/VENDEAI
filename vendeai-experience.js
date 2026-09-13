@@ -18,7 +18,7 @@
   function safeName() {
     const user = (typeof authUser!=='undefined'?authUser:null);
     const meta = user?.user_metadata || {};
-    let name = String(meta.full_name || meta.name || '').trim().split(/\s+/)[0] || '';
+    let name = String((typeof userDisplayName!=='undefined'?userDisplayName:'') || meta.full_name || meta.name || '').trim().split(/\s+/)[0] || '';
     if (!name && user?.email) {
       const raw = String(user.email).split('@')[0].replace(/[._-]+/g, ' ').trim();
       name = raw.split(/\s+/)[0] || '';
