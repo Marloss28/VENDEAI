@@ -21,3 +21,14 @@
 button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 @media(prefers-reduced-motion:no-preference){.primary,.ghost{transition:background .18s ease,transform .18s ease,box-shadow .18s ease}.primary:active,.ghost:active{transform:scale(.98)}.plan-option{animation:planEnter .2s ease both}.plan-option:nth-child(2){animation-delay:.06s}.demo-next{animation:planEnter .2s ease both}@keyframes planEnter{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}}
 @media(max-width:600px){.hero{padding:36px 16px 26px}.hero h1{font-size:39px;letter-spacing:-1.4px}.hero p{font-size:16px}.hero .chips{gap:8px;font-size:13px}.plan-grid{grid-template-columns:1fr}.modalbox:has(.plan-choice){padding:28px 18px 20px}.plan-option{padding:20px}.demobody{padding:20px}.heroBtns button{width:100%}}
+
+/* Acolhimento pós-login */
+.vendeai-welcome{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:start;margin:0 0 26px;padding:24px;border:1px solid #304137;border-radius:18px;background:linear-gradient(135deg,#111914 0%,#0c110e 70%);overflow:hidden;box-shadow:0 22px 60px #0004}
+.vendeai-welcome:after{content:'';position:absolute;width:220px;height:220px;right:-90px;top:-120px;border-radius:50%;background:var(--accent);filter:blur(90px);opacity:.08;pointer-events:none}
+.welcome-mark{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:#18261c;border:1px solid #314b39;color:var(--accent);font-size:19px}
+.welcome-copy small{display:block;color:var(--accent);font-size:10px;letter-spacing:1.5px;font-weight:850;margin:2px 0 7px}
+.welcome-copy h2{font-size:23px;letter-spacing:-.5px;margin:0 0 7px}
+.welcome-copy p{max-width:720px;color:var(--muted);line-height:1.6;margin:0}
+.welcome-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.welcome-plan{position:relative;z-index:1;font-size:10px;font-weight:900;letter-spacing:1px;color:var(--accent);border:1px solid #36513d;background:#142019;border-radius:999px;padding:7px 9px}
+@media(max-width:650px){.vendeai-welcome{grid-template-columns:auto 1fr;padding:19px;gap:13px}.welcome-plan{position:absolute;right:14px;top:14px}.welcome-copy{grid-column:1/-1}.welcome-copy h2{font-size:21px}.welcome-actions button{flex:1;min-width:145px}}
