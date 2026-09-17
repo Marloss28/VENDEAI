@@ -1,10 +1,17 @@
 {
-  "name": "VendeAI — Sua IA de vendas",
-  "short_name": "VendeAI",
-  "description": "Mensagens, abordagens e estratégias de vendas criadas com inteligência artificial.",
+  "name": "Jantar Resolvido",
+  "short_name": "Jantar Resolvido",
+  "description": "Ideias de jantar e uma lista de compras para organizar a semana.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#080a09",
-  "theme_color": "#090b0a",
-  "icons": [{"src":"/assets/vendeai-logo.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+  "background_color": "#f6f1e7",
+  "theme_color": "#173f35",
+  "icons": [
+    {
+      "src": "/assets/jantar-resolvido.webp",
+      "sizes": "1254x1254",
+      "type": "image/webp",
+      "purpose": "any"
+    }
+  ]
 }

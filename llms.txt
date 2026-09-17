@@ -1,29 +1,12 @@
-# VendeAI
+# Jantar Resolvido
 
-> Plataforma brasileira de inteligência artificial focada em vendas conversacionais, abordagens, respostas a objeções, follow-ups e criação de mensagens comerciais.
+> Projeto brasileiro de ideias de jantar e organização das compras para quem cozinha para uma ou duas pessoas.
 
-## Site oficial
-- https://vendeai.dev.br/
+- Site: https://www.vendeai.dev.br/
+- Instagram: https://www.instagram.com/vendavelonline/
+- Ferramenta gratuita: seleção de ideias de jantar e lista base de ingredientes, disponível na página inicial, sem cadastro.
+- Receitas completas e materiais pagos: em preparação; não há venda de um produto de receitas nesta página.
+- Telegram: ainda não disponível.
+- Acesso existente VendeAI: https://www.vendeai.dev.br/vendeai.html
 
-## Principais recursos
-- Gerador de mensagens para vendas
-- Abordagens para Instagram e WhatsApp
-- Respostas a objeções
-- Follow-up
-- Análise de conversas
-- Criação de conteúdo para vendas
-- Biblioteca de prompts e mensagens
-- Plano gratuito e plano PRO
-
-## E-books
-- https://vendeai.dev.br/ebooks.html
-
-## Público
-A VendeAI é voltada a iniciantes e pessoas que vendem produtos ou serviços pela internet e querem ajuda para se comunicar melhor com clientes.
-
-## Idioma
-Português do Brasil (pt-BR)
-
-## Marca
-Nome oficial: VendeAI
-Domínio oficial: vendeai.dev.br
+As ideias de pratos são sugestões de combinação, não receitas testadas ou planos nutricionais. A lista base não inclui quantidades; deve ser ajustada ao consumo e ao que já existe em casa.
