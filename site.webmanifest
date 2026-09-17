@@ -1,10 +1,17 @@
 {
-  "name": "VendeAI — Sua IA de vendas",
-  "short_name": "VendeAI",
-  "description": "Mensagens, abordagens e estratégias de vendas criadas com inteligência artificial.",
+  "name": "Tem Uso",
+  "short_name": "Tem Uso",
+  "description": "Casa, organização e escolhas úteis para a rotina.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#080a09",
-  "theme_color": "#090b0a",
-  "icons": [{"src":"/assets/vendeai-logo.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+  "background_color": "#f8f7f3",
+  "theme_color": "#20201f",
+  "icons": [
+    {
+      "src": "/assets/tem-uso.webp",
+      "sizes": "1254x1254",
+      "type": "image/webp",
+      "purpose": "any"
+    }
+  ]
 }
