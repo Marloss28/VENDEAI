@@ -1,16 +1,16 @@
 {
-  "name": "Tem Uso",
-  "short_name": "Tem Uso",
-  "description": "Casa, organização e escolhas úteis para a rotina.",
+  "name": "VendeAI — Achados e links",
+  "short_name": "VendeAI",
+  "description": "Achados da Shopee e links de produtos pelo WhatsApp e Telegram.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f8f7f3",
   "theme_color": "#20201f",
   "icons": [
     {
-      "src": "/assets/tem-uso.webp",
-      "sizes": "1254x1254",
-      "type": "image/webp",
+      "src": "/assets/vendeai-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "any"
     }
   ]
