@@ -3,7 +3,7 @@
 > Central de indicações de produtos da Shopee, contato pelo WhatsApp e pedidos de convite para grupos.
 
 - Site: https://www.vendeai.dev.br/
-- Instagram: marca Tem Uso, perfil https://www.instagram.com/temuso.achados/
+- Instagram: marca Tem Uso, perfil https://www.instagram.com/temusoachados/
 - O nome e o domínio do site continuam VendeAI por decisão do proprietário.
 - Todos os botões de contato abrem uma conversa no WhatsApp. O visitante precisa enviar a mensagem.
 - O convite de Telegram também é solicitado pelo WhatsApp; ainda não há link de entrada direta configurado.
