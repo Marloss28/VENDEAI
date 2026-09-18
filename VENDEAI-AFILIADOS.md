@@ -23,7 +23,7 @@ Com os convites, substituir os destinos correspondentes e atualizar as explicaç
 
 ## Instagram
 
-Marca: Tem Uso. Foto e bio foram atualizadas. O perfil continua @vendavelonline; não houve confirmação de disponibilidade de outro nome de usuário. A troca do nome público foi bloqueada pela revisão automática na Central de Contas. A interface web informa que o link externo precisa ser alterado pelo app. O post de apresentação não foi publicado, pois o Instagram apresentou erro ao processar a imagem.
+Marca: Tem Uso. Foto e bio foram atualizadas. Nome público confirmado: Tem Uso | Shopee. Nome de usuário alterado e confirmado na Central de Contas: @temuso.achados. Links do site atualizados para https://www.instagram.com/temuso.achados/. A interface web informa que o link externo precisa ser alterado pelo app. O post de apresentação não foi publicado, pois o Instagram apresentou erro ao processar a imagem.
 
 ## Clientes existentes
 
